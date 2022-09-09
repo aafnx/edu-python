@@ -1,18 +1,35 @@
-# 3. Задайте список из k чисел последовательности (1 + 1\k)^k и выведите на экран их сумму.
+# 3. Задайте список из вещественных чисел. Напишите программу, которая найдёт разницу между максимальным и минимальным значением дробной части элементов.
 
-# немного не понял условие, если k это длина списка и в формулу (1 + 1\k)^k
-# подставлять длину списка, то список будет всегда состоять из одинаковых чисел
-# я посчитал что будет правильно, если k длина списка, а
-# в формулу нужно подставлять не длину списка, а последовательно числа с 1 до k
+#     Пример:
 
-lst = []
-k = 5
-sum = 0
+# - [1.1, 1.2, 3.1, 10.01] => 0.19
 
-for i in range(1, (k + 1)):
-  res = (1 + 1/i)**i
-  res = round(res, 2)
-  lst.append(res)
-  sum += res
+numbers = [1.1, 1.2, 3.1, 4.0105]
 
-print(f'{lst}\nсумма = {sum}')
+def get_fractional_part(str_n):
+  str_n = str(str_n)
+  n = str_n.split('.')
+  n = n[1]
+  if len(n) > 1:
+    len_n = len(n)
+    n = float(n) / 10
+    n /= 10 ** (len_n - 1)
+  else:
+    n = float(n) / 10
+  return n
+
+def get_difference_max_min(numbers):
+  numb = get_fractional_part(numbers[0])
+  max = numb
+  min = numb
+
+  for item in numbers[1:]:
+    n = get_fractional_part(item)
+    if n > max:
+      max = n
+    if n < min:
+      min = n
+  diff = max - min
+  return diff
+
+print(get_difference_max_min(numbers))

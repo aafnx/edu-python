@@ -1,40 +1,24 @@
-# 4. Задайте список из N элементов, заполненных числами из промежутка [-N, N].
-#     Найдите произведение элементов на указанных пользователем через пробел позициях.
+# 4. Напишите программу, которая будет преобразовывать десятичное число в двоичное (без встроенных функций).
 
-lst = []
-n = 3
-rng = range(-n, (n + 1))
+#     Пример:
 
-for i in (rng):
-  lst.append(i)
+# - 45 -> 101101
+# - 3 -> 11
+# - 2 -> 10
 
-print(f'Сгенерированный список - {lst}')
+def get_binary_number(n):
+  res = ''
+  while n >= 2:
+    remains = n % 2
+    n //= 2
+    res += str(remains)
+    
+  n %= 2
+  res += str(n)
+  res = int(res[::-1])
+  return res
 
-position = input('Введите позиции элементов через пробел -> ')
-
-# Сделал так что пользователь пишет не индексы элементов, а их порядковые числа
-# то есть с 1 и далее
-
-def pos(position, numbers):
-  position_split = position.split()
-  position_end = int(position_split[-1])
-  if '0' in position_split:
-    print('Вы обратились к 0 элементу, такого элемента в списке нет')
-    return
-  if (position_end > len(numbers)):
-    print(f'Вы обратились к элементу {position_end}, но в списке всего {len(numbers)} элементов')
-    return
-  print(f'Пользователь обратился к позициям - {position_split}')
-
-  res = 1
-  numbers_index = []
-  for item in position_split:
-    item = int(item)
-    num = numbers[item - 1]
-    res *= num
-    numbers_index.append(num)
-
-  print(f'Полученные элементы - {numbers_index}')
-  print(f'Произведение полученных элементов - {res}')
-
-pos(position, lst)
+print(get_binary_number(2))
+print(get_binary_number(3))
+print(get_binary_number(22))
+print(get_binary_number(45))
