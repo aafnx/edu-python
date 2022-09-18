@@ -1,31 +1,78 @@
-# 5. Задайте число. Составьте список чисел Фибоначчи, в том числе для отрицательных индексов.
-
-#     Пример:
-#         для k = 8 список будет выглядеть так: [-21 ,13, -8, 5, −3, 2, −1, 1, 0, 1, 1, 2, 3, 5, 8, 13, 21]
-
-# Негафибоначчи - https://ru.wikipedia.org/wiki/%D0%9D%D0%B5%D0%B3%D0%B0%D1%84%D0%B8%D0%B1%D0%BE%D0%BD%D0%B0%D1%87%D1%87%D0%B8#:%7E:text=%D0%92%20%D0%BC%D0%B0%D1%82%D0%B5%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B5%2C%20%D1%87%D0%B8%D1%81%D0%BB%D0%B0%20%D0%BD%D0%B5%D0%B3%D0%B0%D1%84%D0%B8%D0%B1%D0%BE%D0%BD%D0%B0%D1%87%D1%87%D0%B8%20%E2%80%94%20%D0%BE%D1%82%D1%80%D0%B8%D1%86%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%20%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5%20%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D1%8B%20%D0%BF%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D0%B8%20%D1%87%D0%B8%D1%81%D0%B5%D0%BB%20%D0%A4%D0%B8%D0%B1%D0%BE%D0%BD%D0%B0%D1%87%D1%87%D0%B8.
+# 5. Даны два файла, в каждом из которых находится запись многочлена.
+#     Задача - сформировать файл, содержащий сумму многочленов.
 
 
-def fibonacci(n):
-  res = [0, 1, 1]
-  for i in range(n-2):
-    f = res[i+1] + res[i+2] 
-    res.append(f)
-  return res             
-
-def neg_fibonacci(n):
-  n = abs(n)
-  res = fibonacci(n)
-  for i in range(2, len(res)):
-    if i % 2 == 0:
-      res[i] = -res[i]
-  res.reverse()
+def get_data_from_file(path):
+  data = open(path, 'r')
+  res = data.read()
+  data.close
   return res
 
-def result_func(n):
-  fib = fibonacci(n)
-  neg_fib = neg_fibonacci(-n)
-  res = neg_fib + fib[1:]
+def get_monomials(polynomial):
+  res = polynomial.split(' + ')
+  res[-1] = res[-1][:-4]
   return res
 
-print(result_func(8))
+def get_nums_from_monomial(monomial):
+  res = []
+  for item in monomial:
+    if len(item) == 1:
+      res.append(int(item))
+      continue
+    num = ''
+    for element in item:
+      if element.isdigit():
+        num += element
+      else:
+        break
+    num = int(num)
+    res.append(int(num))
+      
+  return res
+
+def get_sum_polynomial(polynomial_1, polynomial_2):
+  res = ''
+  equation_1 = get_monomials(polynomial_1)
+  equation_1 = get_nums_from_monomial(equation_1)
+  equation_2 = get_monomials(polynomial_2)
+  equation_2 = get_nums_from_monomial(equation_2)
+
+  rng = 0
+  length_difference = len(equation_1) - len(equation_2)
+  length_difference = abs(length_difference)
+
+  if length_difference > 0:
+    if len(equation_1) > len(equation_2):
+      rng = len(equation_1)
+      for i in range(length_difference):
+        equation_2.insert(i, 0)
+    else:
+      rng = len(equation_2)
+      for i in range(length_difference):
+        equation_1.insert(i, 0)
+
+  sums = []
+
+  for i in range(rng):
+    n = equation_1[i] + equation_2[i]
+    sums.append(n)
+
+  degree_num = len(sums) - 1
+  for item in sums:
+    if degree_num == 0:
+      res += f'{item} = 0'
+    elif degree_num == 1:
+      res += f'{item}x + '
+    else:
+      res += f'{item}x^{degree_num} + '
+    degree_num -= 1
+  return res
+
+equation_1 = get_data_from_file('5-1.txt')
+equation_2 = get_data_from_file('5-2.txt')
+
+result = get_sum_polynomial(equation_1, equation_2)
+
+file = open('5-res.txt', 'w')
+file.write(result)
+file.close()

@@ -1,16 +1,22 @@
-# 1. Задайте список из нескольких чисел. Напишите программу, которая найдёт сумму элементов списка, стоящих на нечётной позиции.
-
+# 1. Вычислить число c заданной точностью d
 #     Пример:
+#         при $d = 0.001 (количество знаков после запятой,
+#         которые нужно вывести у числа Пи,
+#         π = 3.141 (на числе Пи проводить операции)
 
-# - [2, 3, 5, 9, 3] -> на нечётных индексы элементы 3 и 9, ответ: 12
+import math
 
-numbers = [2, 3, 5, 9, 3]
+def rounding_accuracy(float_n, accuracy):
+  accuracy = str(accuracy)
+  accuracy = accuracy.split('.')
+  if len(accuracy) < 2:
+    accuracy = (accuracy[0].split('-'))[1]
+  else:
+    accuracy = len(accuracy[1])
+  accuracy = int(accuracy)
+  float_n = round(float_n, accuracy)
+  return float_n
 
-def sum_num_list(numbers):
-  sum = 0
-  for i in range(1, len(numbers)):
-    if i % 2 != 0:
-      sum += numbers[i]
-  return sum
 
-print(sum_num_list(numbers))
+print(rounding_accuracy(math.pi, 0.000001))
+print(rounding_accuracy(math.pi, 0.001))

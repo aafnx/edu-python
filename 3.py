@@ -1,35 +1,22 @@
-# 3. Задайте список из вещественных чисел. Напишите программу, которая найдёт разницу между максимальным и минимальным значением дробной части элементов.
+# 3. Задайте последовательность чисел. Напишите программу, которая выведет список
+#     неповторяющихся элементов исходной последовательности.
+#     [1, 1, 2, 3, 4, 5, 5] -> [2, 3, 4]
 
-#     Пример:
 
-# - [1.1, 1.2, 3.1, 10.01] => 0.19
+def unique_list_items(list_numbers):
+  unique_numbers = []
+  for number in list_numbers:
+    entry = 0
+    for item in list_numbers:
+      if item == number:
+        entry += 1
+        if entry == 2:
+          break
+    if entry < 2:
+      unique_numbers.append(number)
 
-numbers = [1.1, 1.2, 3.1, 4.0105]
+  return unique_numbers
 
-def get_fractional_part(str_n):
-  str_n = str(str_n)
-  n = str_n.split('.')
-  n = n[1]
-  if len(n) > 1:
-    len_n = len(n)
-    n = float(n) / 10
-    n /= 10 ** (len_n - 1)
-  else:
-    n = float(n) / 10
-  return n
+n = [0, 1, 1, 2, 3, 4, 5, 5, 6]
 
-def get_difference_max_min(numbers):
-  numb = get_fractional_part(numbers[0])
-  max = numb
-  min = numb
-
-  for item in numbers[1:]:
-    n = get_fractional_part(item)
-    if n > max:
-      max = n
-    if n < min:
-      min = n
-  diff = max - min
-  return diff
-
-print(get_difference_max_min(numbers))
+print(unique_list_items(n))
