@@ -1,22 +1,11 @@
-# 1. Вычислить число c заданной точностью d
-#     Пример:
-#         при $d = 0.001 (количество знаков после запятой,
-#         которые нужно вывести у числа Пи,
-#         π = 3.141 (на числе Пи проводить операции)
+	# 1. Напишите программу, удаляющую из текста все слова, содержащие ""абв"".
 
-import math
+def del_substr(str, substr):
+  str = str.split()
+  str = list(filter(lambda x: substr not in x, str))
+  str = ' '.join(str)
+  return str
 
-def rounding_accuracy(float_n, accuracy):
-  accuracy = str(accuracy)
-  accuracy = accuracy.split('.')
-  if len(accuracy) < 2:
-    accuracy = (accuracy[0].split('-'))[1]
-  else:
-    accuracy = len(accuracy[1])
-  accuracy = int(accuracy)
-  float_n = round(float_n, accuracy)
-  return float_n
+str = 'Мы неабв очень абв любим Питон иабв Джавабв'
 
-
-print(rounding_accuracy(math.pi, 0.000001))
-print(rounding_accuracy(math.pi, 0.001))
+print(del_substr(str, 'абв'))

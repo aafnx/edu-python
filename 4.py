@@ -1,33 +1,45 @@
-# 4. Задана натуральная степень k. Сформировать случайным образом список коэффициентов
-#     (значения от 0 до 100) многочлена и записать в файл многочлен степени k.
-#     Пример:
-#         k=2 => 2*x² + 4*x + 5 = 0 или x² + 5 = 0 или 10*x² = 0
+# 4. Реализуйте RLE (загуглить) алгоритм: реализуйте модуль сжатия и восстановления данных. Входные и выходные данные хранятся в отдельных текстовых файлах. Пример: aaabbcf -> a3b2c1f1
 
-import random
 
-def get_polynomial(degree):
-  polynomial = ''
-  for _ in range(degree + 1):
-    n = random.randint(0, 100)
-    if n == 0:
-      degree -= 1
-      continue
-    if degree == 0:
-      polynomial += f'{n} = 0'
-    elif degree == 1:
-      polynomial += f'{n}x + '
+src = 'aaabbcfaawwwwwwwwwwwwwwwwwwbbbwwwwwwwwwwwwwwwwwwwwwxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+  
+def packing(source):
+  coincidences = 1
+  source += ' '
+  str = ''
+  res = ''
+  for i in range(len(source)):
+    if source[i] == source[i - 1]:
+      str = source[i]
+      coincidences += 1
     else:
-      polynomial += f'{n}x^{degree} + '
-    degree -= 1
+      res += f'{str}{coincidences}'
+      str = source[i]
+      coincidences = 1
+  return res[1:]
+
+def unpacking(source):
+  str = ' '
+  number = ''
+  res = ''
+  for i in range(len(source)):
+    if not source[i].isdigit():
+      str = source[i]
+      number = ''
+    else:
+      number += source[i]
+      res += str * int(number)
+    if len(number) > 1:
+      digit = int(number[:len(number)-1])
+      res = res[:len(res) - digit]
+  return res
+
+
+p = packing(src)
+print(p)
+
+u = unpacking(p)
+print(u == src)
+print(packing(u))
+
     
-  if 'x' not in polynomial:
-    polynomial = 'Все коэфиценты были равны 0'
-
-  if polynomial[-1] != '0':
-    polynomial = polynomial[:-3]
-    polynomial += ' = 0'
-
-  return polynomial
-
-print(get_polynomial(2))
-print(get_polynomial(4))
