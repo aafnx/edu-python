@@ -1,11 +1,12 @@
-	# 1. Напишите программу, удаляющую из текста все слова, содержащие ""абв"".
+# 1. Задайте список из нескольких чисел. Напишите программу, которая найдёт сумму элементов списка, стоящих на нечётной позиции.
 
-def del_substr(str, substr):
-  str = str.split()
-  str = list(filter(lambda x: substr not in x, str))
-  str = ' '.join(str)
-  return str
+#     Пример:
 
-str = 'Мы неабв очень абв любим Питон иабв Джавабв'
+# - [2, 3, 5, 9, 3] -> на нечётных индексы элементы 3 и 9, ответ: 12
 
-print(del_substr(str, 'абв'))
+from math import fsum
+
+numbers = [2, 3, 5, 9, 3]
+# через обычный sum ни в какую не считал сумму элементов в списке
+res = fsum([numbers[i] for i in range(len(numbers)) if i % 2])
+print(res)
