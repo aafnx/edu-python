@@ -1,18 +1,43 @@
 import view
+import model
+import db
 
-path = './db.txt'
+# commands = ['add', 'find', 'get']
 
 def init():
-    create_contact()
+    request_command()
 
-def create_contact():
-    name = view.get_data('Введите имя: ')
-    surname = view.get_data('Введите фамилию: ')
-    phone_number = view.get_data('Введите номер телефона: ')
-    description = view.get_data('Введите описание: ')
-    contact = f'{name};{surname};{phone_number};{description}\n'
-    save_data_db(contact)
+def request_command():
+    while True:
+        command = view.get_data('Введите команду (add, find, change, showAll, q): ')
 
-def save_data_db(data):
-    with open(path, 'a') as db:
-       db.write(data) 
+        match command:
+            case 'add':
+                db.save(model.add_contact())
+            case 'find':
+                name = get_name()
+                view.show(model.get_contact(db.read(), name))
+            case 'showAll':
+                view.show(model.get_all_contacts(db.read()))
+            case 'change':
+                name = get_name()
+                view.show('change')
+                view.show(model.change_contact(db.read(), name))
+            case 'q':
+                return
+            case _:
+                view.show('Вы ввели неверную команду')
+                
+            
+
+def get_name():
+    return view.get_data('Введите имя: ')
+
+def get_surname():
+    return view.get_data('Введите фамилию: ')
+
+def get_phone_number():
+    return view.get_data('Введите номер телефона: ') 
+
+def get_description():
+    return view.get_data('Введите описание: ')
