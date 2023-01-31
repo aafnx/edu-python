@@ -9,7 +9,7 @@ def init():
 
 def request_command():
     while True:
-        command = view.get_data('Введите команду (add, find, change, showAll, q): ')
+        command = view.get_data('Введите команду (add, find, delete, change, showAll, csv, import, q): ')
 
         match command:
             case 'add':
@@ -17,6 +17,12 @@ def request_command():
             case 'find':
                 name = get_name()
                 view.show(model.get_contact(db.read(), name))
+            case 'delete':
+                view.show(model.get_all_contacts(db.read()))
+                view.show('Кого вы хотите удалить из записной книги?')
+                name = get_name()
+                contact = model.get_contact(db.read(), name)
+                db.change(contact, None, True)
             case 'showAll':
                 view.show(model.get_all_contacts(db.read()))
             case 'change':
@@ -24,6 +30,11 @@ def request_command():
                 contact = model.get_contact(db.read(), name)
                 changed_contact = model.change_contact(contact)
                 db.change(contact, changed_contact)
+            case 'csv':
+                db.export()
+            case 'import':
+                path = view.get_data('Введите путь: ')
+                db.import_csv(path)
             case 'q':
                 return
             case _:
