@@ -21,8 +21,9 @@ def request_command():
                 view.show(model.get_all_contacts(db.read()))
             case 'change':
                 name = get_name()
-                view.show('change')
-                view.show(model.change_contact(db.read(), name))
+                contact = model.get_contact(db.read(), name)
+                changed_contact = model.change_contact(contact)
+                db.change(contact, changed_contact)
             case 'q':
                 return
             case _:
